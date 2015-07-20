@@ -29,8 +29,33 @@ var requestHandler = function(request, response) {
   // console.logs in your code.
   console.log("Serving request type " + request.method + " for url " + request.url);
 
-  // The outgoing status.
-  var statusCode = 200;
+
+  var statusCode;
+
+  if(request.method === "POST"){
+    statusCode = 201;
+
+    console.log("[200] " + request.method + " to " + request.url);
+      
+    request.on('data', function(chunk) {
+      console.log("Received body data:");
+      console.log(chunk.toString());
+    });
+    
+    request.on('end', function() {
+      // empty 200 OK response for now
+      response.writeHead(201, "OK", {'Content-Type': 'text/html'});
+      response.end();
+    });
+
+  }
+  else if(request.method === "GET"){
+    // The outgoing status.
+    statusCode = 200;
+    response.end(JSON.stringify({
+      results:[]
+    }));
+  }
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
@@ -52,7 +77,10 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end("Hello, World!");
+  //console.log('our response:', request);
+
+
+
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
