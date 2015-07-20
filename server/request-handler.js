@@ -8,7 +8,7 @@ in basic-server.js, but it won't work as is.
 You'll have to figure out a way to export this function from
 this file and include it in basic-server.js so that it actually works.
 
-*Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
+*Hint* Check out the node module documentation at http://nodejs.org/api/modules.html
 
 **************************************************************/
 
@@ -71,3 +71,4 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+module.exports = requestHandler;
