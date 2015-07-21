@@ -13,6 +13,7 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 var resultMessages = [];
 var resultRoom = [];
+
 var requestHandler = function(request, response) {
 
   var headers = defaultCorsHeaders;
@@ -22,40 +23,47 @@ var requestHandler = function(request, response) {
 
     if(request.method === "POST"){
 
-      console.log("Serving request type " + request.method + " for url " + request.url);
+      // console.log("Serving request type " + request.method + " for url " + request.url);
 
       request.on('data', function(chunk) {
         resultMessages.push(JSON.parse(chunk));
       });
 
       request.on('end', function() {
-
-        response.writeHead(201, "OK", {'Content-Type': 'text/html'});
+        headers['Content-Type'] = "text/html"
+        response.writeHead(201, "OK", headers);
         response.end();
       });
 
     } else if(request.method === "GET"){
-    // The outgoing status.
-    console.log("Serving request type " + request.method + " for url " + request.url);
-    response.writeHead(200, headers);
-    response.end(JSON.stringify({results: resultMessages}));
+      // The outgoing status.
+      // console.log("Serving request type " + request.method + " for url " + request.url);
+      response.writeHead(200, headers);
+      response.end(JSON.stringify({results: resultMessages}));
     
+    } else if(request.method === "OPTIONS"){
+
+      response.writeHead(200, headers);
+      response.end("OK");
     }
 
   } else if(request.url === '/classes/room1'){
+    
     if(request.method === "GET"){
       response.writeHead(200, headers);
       response.end(JSON.stringify({results: resultRoom}));
+
     } else if(request.method === "POST"){
 
-      console.log("Serving request type " + request.method + " for url " + request.url);
+      // console.log("Serving request type " + request.method + " for url " + request.url);
 
       request.on('data', function(chunk) {
         resultRoom.push(JSON.parse(chunk));
       });
 
       request.on('end', function() {
-        response.writeHead(201, "OK", {'Content-Type': 'text/plain'});
+        headers['Content-Type'] = "text/html"
+        response.writeHead(201, "OK", headers);
         response.end(JSON.stringify(resultRoom[resultRoom.length - 1]));
       });
 
@@ -73,7 +81,7 @@ var requestHandler = function(request, response) {
 var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "access-control-allow-headers": "content-type, accept",
+  "access-control-allow-headers": "accept, x-parse-application-id, x-parse-rest-api-key, content-type",
   "access-control-max-age": 10 // Seconds.
 };
 
