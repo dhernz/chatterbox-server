@@ -23,8 +23,6 @@ var requestHandler = function(request, response) {
 
     if(request.method === "POST"){
 
-      // console.log("Serving request type " + request.method + " for url " + request.url);
-
       request.on('data', function(chunk) {
         resultMessages.push(JSON.parse(chunk));
       });
@@ -32,30 +30,27 @@ var requestHandler = function(request, response) {
       request.on('end', function() {
         headers['Content-Type'] = "text/html"
         response.writeHead(201, "OK", headers);
-        response.end();
+        endRequest(undefined,response);
       });
 
     } else if(request.method === "GET"){
       // The outgoing status.
       // console.log("Serving request type " + request.method + " for url " + request.url);
       response.writeHead(200, headers);
-      response.end(JSON.stringify({results: resultMessages}));
-    
+      endRequest(JSON.stringify({results: resultMessages}),response);
+
     } else if(request.method === "OPTIONS"){
 
       response.writeHead(200, headers);
-      response.end("OK");
+      endRequest("OK",response);
     }
 
   } else if(request.url === '/classes/room1'){
-    
+
     if(request.method === "GET"){
       response.writeHead(200, headers);
-      response.end(JSON.stringify({results: resultRoom}));
-
+      endRequest(JSON.stringify({results: resultRoom}),response);
     } else if(request.method === "POST"){
-
-      // console.log("Serving request type " + request.method + " for url " + request.url);
 
       request.on('data', function(chunk) {
         resultRoom.push(JSON.parse(chunk));
@@ -64,19 +59,19 @@ var requestHandler = function(request, response) {
       request.on('end', function() {
         headers['Content-Type'] = "text/html"
         response.writeHead(201, "OK", headers);
-        response.end(JSON.stringify(resultRoom[resultRoom.length - 1]));
+        endRequest(JSON.stringify(resultRoom[resultRoom.length - 1]),response);
+
       });
-
     }
-  }  
-
-  else{
+  } else{
     response.writeHead(404, headers);
-    response.end();
+    endRequest(undefined,response);
   }
+}
 
+function endRequest(data,response){
+  response.end(data);
 } 
-
 
 var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
