@@ -73,7 +73,7 @@ var app = {
       //         limit: limit},
       success: function(data) {
         data = JSON.parse(data);
-        console.log(data);
+        //console.log(data);
         //console.log(data.results.length);
 
         $('.spinner').hide();
@@ -84,7 +84,7 @@ var app = {
         that.messages = _.uniq(that.messages, function(item){
           return item.objectId;
         })
-        console.log(that.messages.sort(function(a,b){return b.createdAt-a.createdAt}))
+        that.messages.sort(function(a,b){return b.createdAt-a.createdAt});
         // that.messages = (that.messages, function(item){
         //   return new Date(item.createdAt).getTime();
         // });
