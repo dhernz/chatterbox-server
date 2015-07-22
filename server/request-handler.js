@@ -76,7 +76,7 @@ function endRequest(data,response){
 var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "access-control-allow-headers": "accept, x-parse-application-id, x-parse-rest-api-key, content-type",
+  "access-control-allow-headers": "accept, content-type",
   "access-control-max-age": 10 // Seconds.
 };
 

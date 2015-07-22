@@ -6,7 +6,7 @@
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
-
+app.use(express.static('../client'));
 // parse application/x-www-form-urlencoded
 // app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -57,22 +57,25 @@ var ip = "127.0.0.1";
 
 var results = [];
 
-app.get('/log', function (req, res) {
-  res.status(200).send('');
-});
+// app.get('/log', function (req, res) {
+//   res.status(200).send('');
+// });
 
 app.get('/classes/messages', function (req, res) {
   res.status(200).send(JSON.stringify({results:results}));
 });
 
 app.post('/classes/messages', function (req, res) {
-	results.push(req.body);
+  results.push(req.body);
   res.status(201).end();
 });
 
-app.get('/classes/room1', function (req, res) {
-  res.status(200).send('');
-});
+app.options('/classes/messages', function(req, res){
+  res.status(200).end();
+})
+// app.get('/classes/room1', function (req, res) {
+//   res.status(200).send('');
+// });
 
 
 var server = app.listen(port, function () {
